@@ -3,6 +3,36 @@ import pandas as pd
 import hashlib
 from pathlib import Path
 
+
+def fix_ai_wording(text):
+    """Fix only the specific malformed AI wording artifact."""
+    text = str(text)
+
+    text = text.replace(
+        "andmanufacturingcost",
+        " and manufacturing cost"
+    )
+
+    text = text.replace(
+        "*and manufacturing cost*",
+        "and manufacturing cost"
+    )
+
+    text = re.sub(
+        r"\s+and manufacturing cost\s*\(259\.23\)\s*and manufacturing cost\s*\(156\.41\)",
+        " and manufacturing cost (156.41)",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    text = re.sub(
+        r"\s+and manufacturing cost\s*\(259\.23\)\s*\*and manufacturing cost\*\s*\(156\.41\)",
+        " and manufacturing cost (156.41)",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    return text
 from src.data_processing.dataset_summary import show_dataset_summary
 
 from src.visualization.charts import (
@@ -477,7 +507,7 @@ with dataset_tab:
                     border=True
                 ):
 
-                    st.markdown(
+                    st.write(
                         insights.executive_summary
                     )
 
@@ -492,8 +522,8 @@ with dataset_tab:
                         insights.important_trends
                     ):
 
-                        st.markdown(
-                            f"• {trend}"
+                        st.write(
+                            f"• {fix_ai_wording(trend)}"
                         )
 
 
@@ -507,7 +537,7 @@ with dataset_tab:
                         insights.business_risks
                     ):
 
-                        st.markdown(
+                        st.write(
                             f"• {risk}"
                         )
 
@@ -522,7 +552,7 @@ with dataset_tab:
                         insights.recommendations
                     ):
 
-                        st.markdown(
+                        st.write(
                             f"• {recommendation}"
                         )
 
