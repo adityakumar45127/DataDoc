@@ -1,5 +1,5 @@
 from langchain_ollama import ChatOllama
-
+import traceback
 from src.llm.gemini_client import llm as gemini_llm
 
 
@@ -166,42 +166,48 @@ def generate_structured_with_fallback(
 
     try:
 
-        print(
-            "\n===== STRUCTURED LLM: GEMINI ====="
-        )
-
-
-        structured_gemini = (
-            gemini_llm.with_structured_output(
-                output_schema
+            print(
+                "\n===== STRUCTURED LLM: GEMINI ====="
             )
-        )
 
 
-        response = structured_gemini.invoke(
-            prompt
-        )
+            structured_gemini = (
+                gemini_llm.with_structured_output(
+                    output_schema
+                )
+            )
 
 
-        print(
-            "Gemini structured response generated successfully."
-        )
+            response = structured_gemini.invoke(
+                prompt
+            )
 
 
-        if response is not None:
+            print(
+                "Gemini structured response generated successfully."
+            )
 
-            return response
+
+            if response is not None:
+
+                return response
 
 
     except Exception as e:
 
-        print(
-            "\n===== GEMINI STRUCTURED FAILED ====="
-        )
+             print(
+                "\n===== GEMINI STRUCTURED FAILED ====="
+            )
 
-        print(
-            f"Reason: {e}"
-        )
+
+             print(
+                f"Reason: {e}"
+            )
+
+
+             import traceback
+
+             traceback.print_exc()
 
 
     # ----------------------------------------------
