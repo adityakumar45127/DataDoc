@@ -468,19 +468,17 @@ with dataset_tab:
                         )
                     )
 
-            except Exception:
+            except Exception as e:
 
-                st.warning(
-                    "AI Business Insights are currently unavailable."
+                 st.error(
+                     "CSV AI generation failed."
                 )
 
-                st.caption(
-                    "Dataset analysis and visualizations are still available."
-                )
+                 st.exception(e)
 
-                st.session_state.csv_insights = (
-                    None
-                )
+                 st.session_state.csv_insights = (
+                     None
+                 )
 
 
         insights = (
