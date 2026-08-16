@@ -96,22 +96,31 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
 ## 🔎 RAG Pipeline
 
 📄 PDF
+
   ↓
 📖 Text Extraction
+
   ↓
 ✂️ Document Chunking
+
   ↓
 🧠 Embedding Generation
+
   ↓
 🗄️ ChromaDB Vector Store
+
   ↓
 🔎 Semantic Retrieval
+
   ↓
 📚 Relevant Context
+
   ↓
 🤖 LLM Router
+
   ↓
 💬 Grounded Answer
+
   ↓
 📌 Source Pages
 
