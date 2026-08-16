@@ -6,7 +6,7 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
 
 ## 🚀 Live Demo
 
-🌐 **Live Application:** https://datadoc-ai-copilot.streamlit.app/
+🌐 **Live Application:** https://datadoc-ai-copilot.streamlit.app
 
 📦 **GitHub Repository:** https://github.com/adityakumar45127/DataDoc
 
