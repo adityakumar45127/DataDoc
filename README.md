@@ -15,13 +15,21 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
 ## ✨ Features
 
 - 📊 **Dataset Analytics** — Upload CSV files, inspect dataset structure, analyze numerical and categorical features, identify missing values and duplicates, generate statistical summaries, and explore data through visualizations.
+
 - 🤖 **AI Business Insights** — Automatically generate an executive summary, important trends, business risks, and actionable recommendations from uploaded datasets.
+
 - 📄 **PDF Document Intelligence** — Upload PDF documents, extract their content, split documents into meaningful chunks, generate embeddings, and store them in a vector database.
+
 - 🔎 **RAG Question Answering** — Ask questions about uploaded documents and receive context-grounded answers with relevant page-level sources.
+
 - 🧠 **Multi-LLM Fallback Architecture** — Uses Google Gemini as the primary cloud LLM, Groq as the cloud fallback provider, and Ollama as a local fallback for development and local execution.
+
 - ⚡ **Smart AI Caching** — Uses SHA-256 file identification and Streamlit session state to prevent unnecessary re-analysis of the same CSV during application reruns.
+
 - 📚 **Multi-Document Support** — Process and query uploaded PDF documents independently.
+
 - 🧩 **Structured AI Output** — Uses Pydantic schemas to produce consistent and structured business insight responses.
+
 - ☁️ **Cloud Deployment** — Deployed using Streamlit Community Cloud for accessible browser-based demonstrations.
 
 ## 📸 Screenshots
