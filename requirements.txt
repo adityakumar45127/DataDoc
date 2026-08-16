@@ -1,1 +1,12 @@
+streamlit
+pandas
+plotly
+pydantic
+python-dotenv
+pypdf
+chromadb
 sentence-transformers
+langchain-core
+langchain-text-splitters
+langchain-google-genai
+langchain-ollama
