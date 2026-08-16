@@ -4,23 +4,25 @@
 
 DataDoc is an AI-powered **Business Intelligence and Document Intelligence platform** built with Streamlit. It combines structured dataset analysis, AI-generated business insights, PDF document processing, semantic search, and Retrieval-Augmented Generation (RAG) into a single interactive workspace.
 
+## 🚀 Live Demo
+
+🌐 **Live Application:** https://datadoc-ai-copilot.streamlit.app/
+
+📦 **GitHub Repository:** https://github.com/adityakumar45127/DataDoc
+
+> 💡 DataDoc is deployed on Streamlit Community Cloud and supports both CSV-based business analysis and PDF-based document question answering.
+
 ## ✨ Features
 
 - 📊 **Dataset Analytics** — Upload CSV files, inspect dataset structure, analyze numerical and categorical features, identify missing values and duplicates, generate statistical summaries, and explore data through visualizations.
-- 
 - 🤖 **AI Business Insights** — Automatically generate an executive summary, important trends, business risks, and actionable recommendations from uploaded datasets.
-- 
 - 📄 **PDF Document Intelligence** — Upload PDF documents, extract their content, split documents into meaningful chunks, generate embeddings, and store them in a vector database.
-- 
 - 🔎 **RAG Question Answering** — Ask questions about uploaded documents and receive context-grounded answers with relevant page-level sources.
-- 
-- 🧠 **LLM Fallback Architecture** — Uses Google Gemini as the primary LLM with Ollama as a local fallback for improved reliability.
-- 
+- 🧠 **Multi-LLM Fallback Architecture** — Uses Google Gemini as the primary cloud LLM, Groq as the cloud fallback provider, and Ollama as a local fallback for development and local execution.
 - ⚡ **Smart AI Caching** — Uses SHA-256 file identification and Streamlit session state to prevent unnecessary re-analysis of the same CSV during application reruns.
-- 
 - 📚 **Multi-Document Support** — Process and query uploaded PDF documents independently.
-- 
-- 🧩 **Structured AI Output** — Uses Pydantic schemas to produce consistent business insight responses.
+- 🧩 **Structured AI Output** — Uses Pydantic schemas to produce consistent and structured business insight responses.
+- ☁️ **Cloud Deployment** — Deployed using Streamlit Community Cloud for accessible browser-based demonstrations.
 
 ## 📸 Screenshots
 
@@ -42,7 +44,6 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
 
 ## 🏗️ Architecture
 
-```text
                            📊 DataDoc
                               │
                     ┌─────────┴─────────┐
@@ -68,21 +69,24 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
                                         ▼
                                 📚 Relevant Context
                                         │
-                         ┌──────────────┘
-                         ▼
-                    🤖 LLM Layer
-                 Gemini / Ollama
-                         │
-                         ▼
-                 💬 Final Response
-                         │
-                         ▼
-                    📌 Sources
-```
+                                        ▼
+                                  🤖 LLM Router
+                                        │
+                              ┌─────────┼─────────┐
+                              │         │         │
+                              ▼         ▼         ▼
+                           Gemini     Groq     Ollama
+                           Primary    Cloud     Local
+                              │         │         │
+                              └─────────┼─────────┘
+                                        ▼
+                                 💬 Final Response
+                                        │
+                                        ▼
+                                    📌 Sources
 
 ## 🔎 RAG Pipeline
 
-```text
 📄 PDF
   ↓
 📖 Text Extraction
@@ -97,18 +101,16 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
   ↓
 📚 Relevant Context
   ↓
-🤖 LLM
+🤖 LLM Router
   ↓
 💬 Grounded Answer
   ↓
 📌 Source Pages
-```
 
-## 🤖 LLM Reliability
+## 🤖 LLM Reliability Architecture
 
-DataDoc implements a primary/fallback architecture:
+DataDoc uses a multi-provider LLM architecture designed to reduce dependency on a single model provider.
 
-```text
 👤 User Request
       ↓
 🤖 Google Gemini
@@ -116,16 +118,45 @@ DataDoc implements a primary/fallback architecture:
    ┌──┴──┐
    │     │
   ✅     ❌
-Success Failure
+Success  Failure / Quota
    │     │
    ↓     ↓
-Answer 🦙 Ollama
-          │
-          ↓
-        Answer
-```
+Answer  ⚡ Groq
+           │
+        ┌──┴──┐
+        │     │
+       ✅     ❌
+     Success Failure
+        │     │
+        ↓     ↓
+      Answer 🦙 Ollama
+                │
+                ↓
+              Answer
 
-This allows the application to continue using a local Ollama model when the primary Gemini provider is unavailable or produces an invalid response.
+### ☁️ Cloud Execution
+
+On Streamlit Community Cloud, DataDoc uses:
+
+Google Gemini
+      ↓
+Groq fallback
+      ↓
+Graceful error handling
+
+Ollama is not required on Streamlit Cloud because it is intended for local execution.
+
+### 💻 Local Execution
+
+For local development, DataDoc supports:
+
+Google Gemini
+      ↓
+Groq
+      ↓
+Ollama
+
+This architecture allows the application to continue operating when an individual LLM provider becomes temporarily unavailable.
 
 ## 🛠️ Technology Stack
 
@@ -134,18 +165,20 @@ This allows the application to continue using a local Ollama model when the prim
 | 🐍 Programming | Python |
 | 🖥️ Application | Streamlit |
 | 📊 Data Processing | Pandas, NumPy |
-| 📈 Visualization | Matplotlib, Seaborn |
+| 📈 Visualization | Matplotlib, Seaborn, Plotly |
 | 🔗 LLM Framework | LangChain |
-| 🤖 Primary LLM | Google Gemini |
+| 🤖 Primary Cloud LLM | Google Gemini |
+| ⚡ Cloud Fallback LLM | Groq |
 | 🦙 Local LLM | Ollama |
 | 🗄️ Vector Database | ChromaDB |
 | 🧠 Embeddings | Sentence Transformers |
 | 🧩 Structured Output | Pydantic |
+| 🔐 Configuration | Python-dotenv, Streamlit Secrets |
 | 🔧 Version Control | Git, GitHub |
+| ☁️ Deployment | Streamlit Community Cloud |
 
 ## 📁 Project Structure
 
-```text
 DataDoc/
 │
 ├── app.py
@@ -154,6 +187,12 @@ DataDoc/
 │
 ├── .streamlit/
 │   └── config.toml
+│
+├── assets/
+│   ├── dashboard.png
+│   ├── dataset-preview.png
+│   ├── ai-insights.png
+│   └── rag-answer.png
 │
 ├── src/
 │   ├── data_processing/
@@ -182,60 +221,55 @@ DataDoc/
 │
 └── data/
     └── chroma_db/
-```
 
 ## ⚙️ Installation
 
 ### Clone the repository
 
-```bash
-git clone https://github.com/adityakumar45127/DataDoc.git
-cd DataDoc
-```
+    git clone https://github.com/adityakumar45127/DataDoc.git
+    cd DataDoc
 
 ### Create a virtual environment
 
 **Windows**
 
-```powershell
-python -m venv venv
-venv\Scripts\activate
-```
+    python -m venv venv
+    venv\Scripts\activate
 
 **Linux / macOS**
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
+    python3 -m venv venv
+    source venv/bin/activate
 
 ### Install dependencies
 
-```bash
-pip install -r requirements.txt
-```
+    pip install -r requirements.txt
 
 ## 🔐 Configuration
 
+### Local Environment
+
 Create a `.env` file in the project root:
 
-```env
-GOOGLE_API_KEY=your_google_gemini_api_key
-```
+    GOOGLE_API_KEY=your_google_gemini_api_key
+    GROQ_API_KEY=your_groq_api_key
 
 For the local Ollama fallback, install Ollama and pull the configured model:
 
-```bash
-ollama pull llama3.2
-```
+    ollama pull llama3.2
+
+### Streamlit Community Cloud
+
+For deployment on Streamlit Community Cloud, configure the API keys through **Streamlit Secrets**:
+
+    GOOGLE_API_KEY = "your_google_gemini_api_key"
+    GROQ_API_KEY = "your_groq_api_key"
 
 > 🔒 Never commit API keys, `.env` files, or other sensitive credentials to GitHub.
 
 ## ▶️ Run the Application
 
-```bash
-streamlit run app.py
-```
+    streamlit run app.py
 
 The application will launch through the Streamlit interface.
 
@@ -243,7 +277,6 @@ The application will launch through the Streamlit interface.
 
 ### 📊 CSV → AI Business Intelligence
 
-```text
 📁 Upload CSV
      ↓
 🔍 Dataset Profiling
@@ -260,11 +293,9 @@ The application will launch through the Streamlit interface.
 │ ⚠️ Business Risks        │
 │ 💡 Recommendations       │
 └──────────────────────────┘
-```
 
 ### 📄 PDF → RAG → Answer
 
-```text
 📁 Upload PDF
      ↓
 📖 Extract Text
@@ -277,18 +308,18 @@ The application will launch through the Streamlit interface.
      ↓
 🔎 Retrieve Relevant Context
      ↓
-🤖 Generate Answer
+🤖 LLM Router
      ↓
 💬 Answer + 📌 Sources
-```
 
 ## ⚡ Engineering Highlights
 
 - 🧠 End-to-end Retrieval-Augmented Generation pipeline
 - 🗄️ ChromaDB vector database integration
 - 🔎 Semantic document retrieval
-- 🤖 Gemini + Ollama LLM architecture
-- 🔄 Automatic LLM fallback
+- 🤖 Multi-provider LLM architecture
+- 🔄 Gemini → Groq → Ollama fallback strategy
+- ☁️ Cloud-compatible LLM routing
 - 🧩 Structured LLM responses with Pydantic
 - 🔐 SHA-256 based dataset identification
 - ⚡ Session-state based AI insight caching
@@ -296,6 +327,7 @@ The application will launch through the Streamlit interface.
 - 🧱 Modular Python architecture
 - 🖥️ Interactive Streamlit application
 - 🔧 Git/GitHub version-controlled development
+- 🚀 Streamlit Community Cloud deployment
 
 ## 🧪 Testing
 
@@ -303,9 +335,7 @@ The project contains RAG-related tests covering embeddings, retrieval, vector st
 
 Run the test suite with:
 
-```bash
-pytest
-```
+    pytest
 
 ## 🔮 Future Enhancements
 
@@ -317,7 +347,7 @@ pytest
 - ☁️ Cloud vector database integration
 - 🔐 Authentication and user management
 - 📑 Exportable business intelligence reports
-- 🚀 Production deployment
+- 📈 Advanced analytics and monitoring
 
 ## 👨‍💻 Author
 
@@ -333,7 +363,7 @@ B.Tech — Electronics & Communication Engineering
 
 <div align="center">
 
-### 🐍 Python • ⚡ Streamlit • 🤖 LLMs • 🔎 RAG • 🗄️ ChromaDB
+### 🐍 Python • ⚡ Streamlit • 🤖 LLMs • 🔎 RAG • 🗄️ ChromaDB • ☁️ Cloud AI
 
 ⭐ If you find DataDoc useful, consider giving the repository a star.
 
