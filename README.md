@@ -52,6 +52,7 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
 
 ## 🏗️ Architecture
 
+<pre>
                            📊 DataDoc
                               │
                     ┌─────────┴─────────┐
@@ -87,49 +88,56 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
                            Primary    Cloud     Local
                               │         │         │
                               └─────────┼─────────┘
+                                        │
                                         ▼
                                  💬 Final Response
                                         │
                                         ▼
                                     📌 Sources
+</pre>
 
 ## 🔎 RAG Pipeline
 
+<pre>
 📄 PDF
-
-  ↓
+  │
+  ▼
 📖 Text Extraction
-
-  ↓
+  │
+  ▼
 ✂️ Document Chunking
-
-  ↓
+  │
+  ▼
 🧠 Embedding Generation
-
-  ↓
+  │
+  ▼
 🗄️ ChromaDB Vector Store
-
-  ↓
+  │
+  ▼
 🔎 Semantic Retrieval
-
-  ↓
+  │
+  ▼
 📚 Relevant Context
-
-  ↓
+  │
+  ▼
 🤖 LLM Router
-
-  ↓
+  │
+  ▼
 💬 Grounded Answer
-
-  ↓
+  │
+  ▼
 📌 Source Pages
+
+</pre>
 
 ## 🤖 LLM Reliability Architecture
 
 DataDoc uses a multi-provider LLM architecture designed to reduce dependency on a single model provider.
 
+<pre>
 👤 User Request
-      ↓
+      │
+      ▼
 🤖 Google Gemini
       │
    ┌──┴──┐
@@ -137,7 +145,7 @@ DataDoc uses a multi-provider LLM architecture designed to reduce dependency on 
   ✅     ❌
 Success  Failure / Quota
    │     │
-   ↓     ↓
+   ▼     ▼
 Answer  ⚡ Groq
            │
         ┌──┴──┐
@@ -145,11 +153,40 @@ Answer  ⚡ Groq
        ✅     ❌
      Success Failure
         │     │
-        ↓     ↓
+        ▼     ▼
       Answer 🦙 Ollama
                 │
-                ↓
+                ▼
               Answer
+</pre>
+
+### ☁️ Cloud Execution
+
+<pre>
+Google Gemini
+      │
+      ▼
+Groq Fallback
+      │
+      ▼
+Graceful Error Handling
+</pre>
+
+Ollama is not required on Streamlit Cloud because it is intended for local execution.
+
+### 💻 Local Execution
+
+<pre>
+Google Gemini
+      │
+      ▼
+Groq
+      │
+      ▼
+Ollama
+</pre>
+
+This architecture allows the application to continue operating when an individual LLM provider becomes temporarily unavailable.
 
 ### ☁️ Cloud Execution
 
