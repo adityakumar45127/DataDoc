@@ -10,3 +10,4 @@ langchain-core
 langchain-text-splitters
 langchain-google-genai
 langchain-ollama
+langchain-groq

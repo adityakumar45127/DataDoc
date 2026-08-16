@@ -1,5 +1,8 @@
+import os
+
 from langchain_ollama import ChatOllama
-import traceback
+from langchain_groq import ChatGroq
+
 from src.llm.gemini_client import llm as gemini_llm
 
 
@@ -11,6 +14,27 @@ local_llm = ChatOllama(
     model="llama3.2",
     temperature=0
 )
+
+
+# ==================================================
+# GROQ CLOUD MODEL
+# ==================================================
+
+groq_api_key = os.getenv(
+    "GROQ_API_KEY"
+)
+
+
+groq_llm = None
+
+
+if groq_api_key:
+
+    groq_llm = ChatGroq(
+        model="llama-3.3-70b-versatile",
+        temperature=0,
+        groq_api_key=groq_api_key
+    )
 
 
 # ==================================================
@@ -130,25 +154,80 @@ def generate_with_fallback(prompt):
 
 
     # ----------------------------------------------
-    # Fallback to Ollama
+    # Try Groq
     # ----------------------------------------------
 
-    print(
-        "\n===== LLM PROVIDER: OLLAMA ====="
-    )
+    if groq_llm:
+
+        try:
+
+            print(
+                "\n===== LLM PROVIDER: GROQ ====="
+            )
+
+            groq_response = groq_llm.invoke(
+                prompt
+            )
+
+            print(
+                "Groq response generated successfully."
+            )
 
 
-    local_response = local_llm.invoke(
-        prompt
-    )
+            if not is_invalid_answer(
+                groq_response
+            ):
+
+                return groq_response
 
 
-    print(
-        "Ollama response generated successfully."
-    )
+        except Exception as e:
+
+            print(
+                "\n===== GROQ FAILED ====="
+            )
+
+            print(
+                f"Reason: {e}"
+            )
 
 
-    return local_response
+    # ----------------------------------------------
+    # Local Ollama fallback
+    # ----------------------------------------------
+
+    try:
+
+        print(
+            "\n===== LLM PROVIDER: OLLAMA ====="
+        )
+
+        local_response = local_llm.invoke(
+            prompt
+        )
+
+        print(
+            "Ollama response generated successfully."
+        )
+
+        return local_response
+
+
+    except Exception as e:
+
+        print(
+            "\n===== OLLAMA FAILED ====="
+        )
+
+        print(
+            f"Reason: {e}"
+        )
+
+
+        raise RuntimeError(
+            "All available AI providers failed "
+            "to generate a response."
+        ) from e
 
 
 # ==================================================
@@ -166,25 +245,71 @@ def generate_structured_with_fallback(
 
     try:
 
+        print(
+            "\n===== STRUCTURED LLM: GEMINI ====="
+        )
+
+
+        structured_gemini = (
+            gemini_llm.with_structured_output(
+                output_schema
+            )
+        )
+
+
+        response = structured_gemini.invoke(
+            prompt
+        )
+
+
+        print(
+            "Gemini structured response generated successfully."
+        )
+
+
+        if response is not None:
+
+            return response
+
+
+    except Exception as e:
+
+        print(
+            "\n===== GEMINI STRUCTURED FAILED ====="
+        )
+
+        print(
+            f"Reason: {e}"
+        )
+
+
+    # ----------------------------------------------
+    # Try Groq structured output
+    # ----------------------------------------------
+
+    if groq_llm:
+
+        try:
+
             print(
-                "\n===== STRUCTURED LLM: GEMINI ====="
+                "\n===== STRUCTURED LLM: GROQ ====="
             )
 
 
-            structured_gemini = (
-                gemini_llm.with_structured_output(
+            structured_groq = (
+                groq_llm.with_structured_output(
                     output_schema
                 )
             )
 
 
-            response = structured_gemini.invoke(
+            response = structured_groq.invoke(
                 prompt
             )
 
 
             print(
-                "Gemini structured response generated successfully."
+                "Groq structured response generated successfully."
             )
 
 
@@ -193,33 +318,27 @@ def generate_structured_with_fallback(
                 return response
 
 
-    except Exception as e:
+        except Exception as e:
 
-             print(
-                "\n===== GEMINI STRUCTURED FAILED ====="
+            print(
+                "\n===== GROQ STRUCTURED FAILED ====="
             )
 
-
-             print(
+            print(
                 f"Reason: {e}"
             )
 
 
-             import traceback
-
-             traceback.print_exc()
-
-
     # ----------------------------------------------
-    # Fallback to Ollama structured output
+    # Local Ollama structured fallback
     # ----------------------------------------------
-
-    print(
-        "\n===== STRUCTURED LLM: OLLAMA ====="
-    )
-
 
     try:
+
+        print(
+            "\n===== STRUCTURED LLM: OLLAMA ====="
+        )
+
 
         structured_ollama = (
             local_llm.with_structured_output(
@@ -253,6 +372,6 @@ def generate_structured_with_fallback(
 
 
         raise RuntimeError(
-            "Both Gemini and Ollama failed to generate "
-            "structured AI insights."
+            "All available AI providers failed "
+            "to generate structured AI insights."
         ) from e
