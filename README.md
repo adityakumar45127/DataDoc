@@ -22,6 +22,24 @@ DataDoc is an AI-powered **Business Intelligence and Document Intelligence platf
 - 
 - 🧩 **Structured AI Output** — Uses Pydantic schemas to produce consistent business insight responses.
 
+## 📸 Screenshots
+
+### 🖥️ DataDoc Dashboard
+
+![DataDoc Dashboard](assets/dashboard.png)
+
+### 📊 Dataset Analytics
+
+![Dataset Analytics](assets/dataset-preview.png)
+
+### 🤖 AI Business Insights
+
+![AI Business Insights](assets/ai-insights.png)
+
+### 🔎 RAG Document Question Answering
+
+![RAG Question Answering](assets/rag-answer.png)
+
 ## 🏗️ Architecture
 
 ```text
