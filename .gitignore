@@ -17,3 +17,11 @@ vector_store/
 # OS Files
 .DS_Store
 Thumbs.db
+# Streamlit Secrets
+.streamlit/secrets.toml
+
+# Uploaded / generated test files
+tests/*.pdf
+
+# Generated ChromaDB
+data/chroma_db/
