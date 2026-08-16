@@ -232,7 +232,7 @@ This architecture allows the application to continue operating when an individua
 | ☁️ Deployment | Streamlit Community Cloud |
 
 ## 📁 Project Structure
-
+<pre>
 DataDoc/
 │
 ├── app.py
@@ -275,6 +275,7 @@ DataDoc/
 │
 └── data/
     └── chroma_db/
+</pre>
 
 ## ⚙️ Installation
 
@@ -330,6 +331,7 @@ The application will launch through the Streamlit interface.
 ## 🔄 Core Workflows
 
 ### 📊 CSV → AI Business Intelligence
+<pre>
 
 📁 Upload CSV
      ↓
@@ -347,8 +349,10 @@ The application will launch through the Streamlit interface.
 │ ⚠️ Business Risks        │
 │ 💡 Recommendations       │
 └──────────────────────────┘
+</pre>
 
 ### 📄 PDF → RAG → Answer
+<pre>
 
 📁 Upload PDF
      ↓
@@ -365,6 +369,7 @@ The application will launch through the Streamlit interface.
 🤖 LLM Router
      ↓
 💬 Answer + 📌 Sources
+</pre>
 
 ## ⚡ Engineering Highlights
 
